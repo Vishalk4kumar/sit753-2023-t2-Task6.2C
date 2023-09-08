@@ -4,38 +4,82 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                echo 'Using Maven for automated builds'
+                echo 'Maven'
             }
         }
         stage('Unit and Integration Tests') {
             steps {
-                echo 'Using JUnit for automated unit tests'
-                echo 'Using Postman for integration tests'
+                echo 'JUnit (for unit tests)'
+                echo 'Postman (for integration tests)'
+            }
+            post {
+                success {
+                    script {
+                        emailext (
+                            subject: "Unit and Integration Tests Passed",
+                            body: "Unit and Integration Tests have passed successfully.",
+                            attachLog: true,
+                            to: 'lohana.vishal@gmail.com'
+                        )
+                    }
+                }
+                failure {
+                    script {
+                        emailext (
+                            subject: "Unit and Integration Tests Failed",
+                            body: "Unit and Integration Tests have failed.",
+                            attachLog: true,
+                            to: 'lohana.vishal@gmail.com'
+                        )
+                    }
+                }
             }
         }
         stage('Code Analysis') {
             steps {
-                echo 'Using SonarQube for code analysis'
+                echo 'SonarQube'
             }
         }
         stage('Security Scan') {
             steps {
-                echo 'Using OWASP ZAP for security scanning'
+                echo 'OWASP ZAP'
+            }
+            post {
+                success {
+                    script {
+                        emailext (
+                            subject: "Security Scan Passed",
+                            body: "Security Scan has passed successfully.",
+                            attachLog: true,
+                            to: 'lohana.vishal@gmail.com'
+                        )
+                    }
+                }
+                failure {
+                    script {
+                        emailext (
+                            subject: "Security Scan Failed",
+                            body: "Security Scan has failed.",
+                            attachLog: true,
+                            to: 'lohana.vishal@gmail.com'
+                        )
+                    }
+                }
             }
         }
         stage('Deploy to Staging') {
             steps {
-                echo 'Using Ansible for deployment to the staging environment'
+                echo 'Ansible'
             }
         }
         stage('Integration Tests on Staging') {
             steps {
-                echo 'Using Selenium for integration tests on the staging environment'
+                echo 'Selenium'
             }
         }
         stage('Deploy to Production') {
             steps {
-                echo 'Using Jenkins for deployment to the production server'
+                echo 'Jenkins'
             }
         }
     }
